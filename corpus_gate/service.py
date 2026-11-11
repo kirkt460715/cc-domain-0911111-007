@@ -51,7 +51,7 @@ class CorpusGate:
         from corpus_gate.dedup import diagnostics
         from corpus_gate.ingest import bundles, validation as intake_validation
         from corpus_gate.releases import validation, statistics
-        from corpus_gate.review import sampling
+        from corpus_gate.review import sampling, surveys, estimation
         return {
             'intake.preflight': (bind(intake_validation.preflight), 'source_id profile_id records context', ''),
             'intake.manifest': (bind(intake_validation.manifest), 'source_id', ''),
@@ -68,6 +68,13 @@ class CorpusGate:
             'release.histogram': (bind(statistics.length_histogram), 'release_id boundaries', ''),
             'review.sample': (bind(sampling.stratified_queue), 'seed', 'total by include_accepted'),
             'review.validate_sample': (bind(sampling.validate_sample), 'sample', ''),
+            'survey.design': (bind(surveys.design), 'survey_id seed', 'total stratification allocation explicit unit_type run_id'),
+            'survey.get': (bind(surveys.get), 'survey_id', ''),
+            'survey.respond': (bind(surveys.respond), 'survey_id unit_key conforming actor reason', ''),
+            'survey.noninterview': (bind(surveys.noninterview), 'survey_id unit_key reason actor', ''),
+            'survey.status': (bind(surveys.status), 'survey_id', ''),
+            'survey.estimate': (bind(estimation.estimate), 'survey_id', ''),
+            'survey.compare': (bind(estimation.compare), 'before_id after_id', ''),
             'diagnostics.pairs': (bind(diagnostics.evaluate_pairs), 'pairs', 'numerator denominator size'),
             'diagnostics.sweep': (bind(diagnostics.sweep), 'pairs thresholds', 'size'),
             'diagnostics.bridges': (bind(diagnostics.bridges), 'run_id', ''),

@@ -25,6 +25,9 @@ CREATE TABLE IF NOT EXISTS cluster_edges(run_id TEXT NOT NULL,left_id TEXT NOT N
 CREATE TABLE IF NOT EXISTS releases(release_id TEXT PRIMARY KEY,revision INTEGER NOT NULL,state TEXT NOT NULL,run_id TEXT NOT NULL,context TEXT NOT NULL,definition TEXT NOT NULL,digest TEXT NOT NULL,corpus_revision INTEGER NOT NULL,created_at TEXT NOT NULL,published_at TEXT);
 CREATE TABLE IF NOT EXISTS release_members(release_id TEXT NOT NULL REFERENCES releases(release_id),document_id TEXT NOT NULL,cluster_id TEXT NOT NULL,split TEXT NOT NULL,ordinal INTEGER NOT NULL,payload TEXT NOT NULL,digest TEXT NOT NULL,PRIMARY KEY(release_id,document_id));
 CREATE TABLE IF NOT EXISTS release_events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,release_id TEXT NOT NULL,action TEXT NOT NULL,body TEXT NOT NULL,at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS survey_designs(survey_id TEXT PRIMARY KEY,unit_type TEXT NOT NULL,stratification TEXT NOT NULL,allocation_mode TEXT NOT NULL,corpus_revision INTEGER NOT NULL,run_id TEXT,seed TEXT NOT NULL,frame_size INTEGER NOT NULL,strata TEXT NOT NULL,definition TEXT NOT NULL,digest TEXT NOT NULL,created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS survey_units(survey_id TEXT NOT NULL,unit_key TEXT NOT NULL,stratum TEXT NOT NULL,cluster_id TEXT,document_id TEXT,frame_revision INTEGER NOT NULL,frame_version INTEGER NOT NULL,cluster_size INTEGER NOT NULL,inclusion_probability REAL NOT NULL,design_weight REAL,selected INTEGER NOT NULL,members TEXT,PRIMARY KEY(survey_id,unit_key));
+CREATE TABLE IF NOT EXISTS survey_responses(survey_id TEXT NOT NULL,unit_key TEXT NOT NULL,document_id TEXT NOT NULL,conforming INTEGER,reason TEXT,actor TEXT NOT NULL,recorded_at TEXT NOT NULL,PRIMARY KEY(survey_id,unit_key,document_id));
 CREATE TABLE IF NOT EXISTS audit(position INTEGER PRIMARY KEY AUTOINCREMENT,action TEXT NOT NULL,payload TEXT NOT NULL,previous_hash TEXT NOT NULL,entry_hash TEXT NOT NULL,at TEXT NOT NULL);
 '''
 
